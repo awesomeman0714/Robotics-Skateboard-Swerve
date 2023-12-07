@@ -3,6 +3,9 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
@@ -32,9 +35,15 @@ public class SwerveModule {
     private RelativeEncoder driveEnc;
     private RelativeEncoder steerEnc;
 
-    SwerveModule(int driveCanID, int steerCanID){
+    SwerveModule(int driveCanID, int steerCanID, boolean isSteerInverted, boolean isDriveInverted){
         driveMotor = new CANSparkMax(driveCanID, MotorType.kBrushless);
         steerMotor = new CANSparkMax(steerCanID, MotorType.kBrushless);
+
+        driveMotor.setInverted(isDriveInverted);
+        steerMotor.setInverted(isSteerInverted);
+
+        driveEnc = driveMotor.getEncoder();
+        steerEnc = steerMotor.getEncoder();
 
         drivePID = driveMotor.getPIDController();
         steerPID = steerMotor.getPIDController();
@@ -71,30 +80,25 @@ public class SwerveModule {
     }
 
     public void setModuleState(double speed, double angle) {
-
-      if (speed!=0)
-      {
-        if (Math.abs(steerEnc.getPosition() - angle) > Math.PI/2) {
-            if (angle>Math.PI/2) {
-                angle=(angle-Math.PI);
+        if (Math.abs(steerEnc.getPosition() - angle) < Math.PI/2) {
+            if (angle>0) {
+                angle=(angle + Math.PI);
             }
-           else if (angle<-Math.PI/2) {
-                angle=(angle+Math.PI);
+           else  {
+                angle=(Math.PI - angle);
                 
             }
+
             speed=speed*-1;
-
-            steerPID.setReference(-1*angle, ControlType.kPosition);
-            drivePID.setReference(speed, ControlType.kDutyCycle);
         } 
-        //The annge must be multiplied by -1 because the motor angle defines clockwise rotation
-    }
-      
-    else {//Speed is 0, adjustWheels is true.  Turn wheels without moving 
+
+        make custom int where when angle goes over pi it rounds to -pi
+        pi + pi/2 should be -pi/2 not 3pi/2
+
         steerPID.setReference(-1*angle, ControlType.kPosition);
-        drivePID.setReference(0, ControlType.kDutyCycle);
-    }
+        drivePID.setReference(speed, ControlType.kDutyCycle);
 
-
+        SmartDashboard.putNumber("Speed", speed);
+        SmartDashboard.putNumber("Angle", angle);
     }
 }
