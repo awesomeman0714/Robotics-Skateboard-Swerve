@@ -3,47 +3,53 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveDrive {
-    private final int driveFRcanID = 0;
-    private final int driveFLcanID = 0;
-    private final int driveBRcanID = 0;
-    private final int driveBLcanID = 0;
+    private static final int driveFRcanID = 18;
+    private static final int driveFLcanID = 12;
+    private static final int driveBRcanID = 16;
+    private static final int driveBLcanID = 14;
 
-    private final int steerFRcanID = 0;
-    private final int steerFLcanID = 0;
-    private final int steerBRcanID = 0;
-    private final int steerBLcanID = 0;
+    private static final int steerFRcanID = 11;
+    private static final int steerFLcanID = 13;
+    private static final int steerBRcanID = 17;
+    private static final int steerBLcanID = 15;
 
-    public final double fullScaleXSpeed=4.5;  //The speed that corresponds to joystick 1;
-    public final double fullScaleYSpeed=4.5;  //The ground speeds are in meters/second;
-    public final double fullScaleRotationRate=2*3.14; //Max rotation rate in radians/second
+    public static final double fullScaleXSpeed=4.5;  //The speed that corresponds to joystick 1;
+    public static final double fullScaleYSpeed=4.5;  //The ground speeds are in meters/second;
+    public static final double fullScaleRotationRate=2*3.14; //Max rotation rate in radians/second
 
     public static SwerveModule frontRight;
     public static SwerveModule frontLeft;
     public static SwerveModule backRight;
     public static SwerveModule backLeft;
 
-    public void init(){
-        frontRight = new SwerveModule(driveFRcanID, steerFRcanID);
-        frontLeft = new SwerveModule(driveFLcanID, steerFLcanID);
-        backRight = new SwerveModule(driveBRcanID, steerBRcanID);
-        backLeft = new SwerveModule(driveBLcanID, steerBLcanID);
+    public static void init() {
+        frontRight = new SwerveModule(driveFRcanID, steerFRcanID, false, true);
+        frontLeft = new SwerveModule(driveFLcanID, steerFLcanID, false, false);
+        backRight = new SwerveModule(driveBRcanID, steerBRcanID, false, true);
+        backLeft = new SwerveModule(driveBLcanID, steerBLcanID, false, false);
     }
 
-    public void drive(){
+    public static void drive(){
 
            //The stick values will give the fraction of full scale
-           double requestedXStick = Devices.getStickX();
-           double requestedYStick = Devices.getStickY();
-           double requestedRotationStick = Devices.swerveRotationRate();
+           double requestedXStick = Devices.swerveXRate();
+           double requestedYStick = Devices.swerveYRate();
+           double requestedRotationStick = 0/*Devices.swerveRotationRate()*/;
            
+        SmartDashboard.putNumber("Drive Stick X", requestedXStick);
+        SmartDashboard.putNumber("Drive Stick Y", requestedYStick);
    
      /*    double requestedXVelocity=requestedXStick*fullScaleXSpeed;
         double requestedYVelocity = requestedYStick*fullScaleYSpeed;*/
 
         double requestedXVelocity = pedalToMedal(requestedXStick);
         double requestedYVelocity = pedalToMedal(requestedYStick);
+
+        SmartDashboard.putNumber("X Velocity", requestedXVelocity);
+        SmartDashboard.putNumber("Y Velocity", requestedYVelocity);
 
         double requestedRotationRate = requestedRotationStick * fullScaleRotationRate;
         double yawRadians = Devices.getYawRadians();
@@ -52,19 +58,22 @@ public class SwerveDrive {
            
     }
 
-    public double pedalToMedal(double stickval)
+    public static double pedalToMedal(double stickval)
     {
+        
         if (Math.abs(stickval)<0.95)
         {
            return  stickval*fullScaleXSpeed;
         }
         else
         {
-            return 2*fullScaleXSpeed*Math.signum(stickval);
+            //return 2*fullScaleXSpeed*Math.signum(stickval);
+
+            return  stickval*fullScaleXSpeed;
         }
     }
 
-    public void driveByNumbersFieldCentric(double x, double y, double rot, double yaw)
+    public static void driveByNumbersFieldCentric(double x, double y, double rot, double yaw)
     {
 
         
@@ -80,7 +89,7 @@ public class SwerveDrive {
         backRight.setModuleState(requiredStates[3].speedMetersPerSecond, requiredStates[3].angle.getRadians());
     }
 
-    public SwerveModuleState[] computeModuleStatesFieldCentric(double xSpeed, double ySpeed, double rotationRate, double yaw)
+    public static SwerveModuleState[] computeModuleStatesFieldCentric(double xSpeed, double ySpeed, double rotationRate, double yaw)
     {
         SwerveModuleState[] ret; //Students:  Note that "new" has not been called.  This is a declaration.
   

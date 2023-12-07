@@ -18,7 +18,10 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    Devices.init();
+    SwerveDrive.init();
+  }
 
   @Override
   public void robotPeriodic() {}
@@ -33,7 +36,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    SwerveDrive.drive();
+  }
 
   @Override
   public void disabledInit() {}

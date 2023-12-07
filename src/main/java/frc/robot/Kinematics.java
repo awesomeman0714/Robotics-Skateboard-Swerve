@@ -25,18 +25,15 @@ public class Kinematics {
     //The positions of the corners.  Must be in meters about the center of the robot
     //https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/swerve-drive-kinematics.html
 
-    public final static  Translation2d locFL = new Translation2d(pracFLDX,pracFLDY);
+    public final static Translation2d locFL = new Translation2d(pracFLDX,pracFLDY);
     public final static Translation2d locFR = new Translation2d(pracFRDX,pracFRDY);
     public final static Translation2d locBL = new Translation2d(pracBLDX,pracBLDY);
     public final static Translation2d locBR = new Translation2d(pracBRDX,pracBRDY);
     
     // Creating my kinematics object using the module locations
-    static SwerveDriveKinematics kinPractice = new SwerveDriveKinematics(locFL, locFR, locBL, locBR);
+    public static SwerveDriveKinematics kinPractice = new SwerveDriveKinematics(locFL, locFR, locBL, locBR);
 
-    static SwerveDriveKinematics kinematics;
-
-    public static SwerveDriveKinematics getCentralPivotKinematics()
-    {
+    public static SwerveDriveKinematics getCentralPivotKinematics() {
         return kinPractice;
     }
 

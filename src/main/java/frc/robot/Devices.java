@@ -9,17 +9,19 @@ public class Devices {
 
     public static AHRS rawNavX;
 
-    public void init() {
+    public static void init() {
         driveStick = new Joystick(0);
         rotateStick = new Joystick(1);
+
+        rawNavX = new AHRS();
     }
 
-    public static double getStickX() {
-        return driveStick.getX();
+    public static double swerveXRate() {
+        return qDeadband(-1*driveStick.getRawAxis(1), 0.1);
     }
 
-    public static double getStickY() {
-        return driveStick.getY();
+    public static double swerveYRate() {
+        return qDeadband(-1*driveStick.getRawAxis(0),0.1);
     }
 
     public static double swerveRotationRate() {
@@ -40,6 +42,19 @@ public class Devices {
         {
             return Math.signum(inputSpeed)*(Math.abs(inputSpeed)-dband)/(1-dband);
         }
+    }
+
+    public static double qDeadband(double inputSpeed, double dband)
+    {
+        
+    if (Math.abs(inputSpeed)<=dband)
+    {
+        return 0;
+    }
+    else 
+    {
+        return Math.signum(inputSpeed)*(Math.abs(inputSpeed)-dband)*(Math.abs(inputSpeed)-dband)/((1-dband)*(1-dband));
+    }
     }
 
 
