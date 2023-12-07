@@ -92,9 +92,6 @@ public class SwerveModule {
             speed=speed*-1;
         } 
 
-        make custom int where when angle goes over pi it rounds to -pi
-        pi + pi/2 should be -pi/2 not 3pi/2
-
         steerPID.setReference(-1*angle, ControlType.kPosition);
         drivePID.setReference(speed, ControlType.kDutyCycle);
 
