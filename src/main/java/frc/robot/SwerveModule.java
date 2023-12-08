@@ -81,11 +81,11 @@ public class SwerveModule {
 
     public void setModuleState(double speed, double angle) {
         if (Math.abs(steerEnc.getPosition() - angle) < Math.PI/2) {
-            if (angle>0) {
+            if (angle < 0) {
                 angle=(angle + Math.PI);
             }
            else  {
-                angle=(Math.PI - angle);
+                angle=(angle - Math.PI);
                 
             }
 

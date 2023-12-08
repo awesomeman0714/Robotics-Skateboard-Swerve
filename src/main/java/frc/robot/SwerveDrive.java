@@ -67,9 +67,7 @@ public class SwerveDrive {
         }
         else
         {
-            //return 2*fullScaleXSpeed*Math.signum(stickval);
-
-            return  stickval*fullScaleXSpeed;
+            return 2*fullScaleXSpeed*Math.signum(stickval);
         }
     }
 
@@ -78,7 +76,7 @@ public class SwerveDrive {
 
         
         SwerveModuleState[] requiredStates = computeModuleStatesFieldCentric(x,y,rot,yaw);
-        ///0, 1, 2, 3 = FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT
+        //0, 1, 2, 3 = FRONTLEFT, FRONTRIGHT, BACKLEFT, BACKRIGHT
 
         //The SwerveModuleState returned from computeModuleStates is going to be in meters per second, but we could translate units
         //from there.
