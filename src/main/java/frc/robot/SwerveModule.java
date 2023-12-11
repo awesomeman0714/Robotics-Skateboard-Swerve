@@ -80,13 +80,27 @@ public class SwerveModule {
     }
 
     public void setModuleState(double speed, double angle) {
-        if (Math.abs(steerEnc.getPosition() - angle) < Math.PI/2) {
+
+        double encPos = steerEnc.getPosition();
+
+        //does encPos need to be between -pi and pi?
+        //yes?
+        //if encPos = 3pi/2 and angle = -pi.2 wheed doesnt need to move, but wheel will move 
+
+        encPos = encPos + 2 * Math.floor((Math.PI - encPos) / (2 * Math.PI)) * Math.PI; //converts between pi and -pi
+
+        //is angle always between pi and -pi?
+
+        angle = angle + 2 * Math.floor((Math.PI - angle) / (2 * Math.PI)) * Math.PI; //converts between pi and -pi
+
+        //https://math.stackexchange.com/questions/4451609/how-to-find-an-equivalent-angle-between-pi-and-pi
+
+        if (Math.abs(encPos - angle) < Math.PI/2) {
             if (angle < 0) {
                 angle=(angle + Math.PI);
             }
            else  {
                 angle=(angle - Math.PI);
-                
             }
 
             speed=speed*-1;
