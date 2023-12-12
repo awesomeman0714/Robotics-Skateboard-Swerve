@@ -35,9 +35,9 @@ public class SwerveDrive {
     public static void drive(){
 
            //The stick values will give the fraction of full scale
-           double requestedXStick = Devices.swerveXRate();
-           double requestedYStick = Devices.swerveYRate();
-           double requestedRotationStick = 0/*Devices.swerveRotationRate()*/;
+        double requestedXStick = Devices.swerveXRate();
+        double requestedYStick = Devices.swerveYRate();
+        double requestedRotationStick = Devices.swerveRotationRate()/5;
            
         SmartDashboard.putNumber("Drive Stick X", requestedXStick);
         SmartDashboard.putNumber("Drive Stick Y", requestedYStick);
@@ -60,7 +60,6 @@ public class SwerveDrive {
 
     public static double pedalToMedal(double stickval)
     {
-        
         if (Math.abs(stickval)<0.95)
         {
            return  stickval*fullScaleXSpeed;

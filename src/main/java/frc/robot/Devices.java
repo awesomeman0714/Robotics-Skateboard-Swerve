@@ -14,6 +14,8 @@ public class Devices {
         rotateStick = new Joystick(1);
 
         rawNavX = new AHRS();
+
+        rawNavX.setAngleAdjustment(180);
     }
 
     public static double swerveXRate() {
