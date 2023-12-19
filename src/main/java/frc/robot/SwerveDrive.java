@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveDrive {
@@ -37,7 +38,7 @@ public class SwerveDrive {
            //The stick values will give the fraction of full scale
         double requestedXStick = Devices.swerveXRate();
         double requestedYStick = Devices.swerveYRate();
-        double requestedRotationStick = Devices.swerveRotationRate()/5;
+        double requestedRotationStick = Devices.swerveRotationRate();
            
         SmartDashboard.putNumber("Drive Stick X", requestedXStick);
         SmartDashboard.putNumber("Drive Stick Y", requestedYStick);
@@ -53,6 +54,8 @@ public class SwerveDrive {
 
         double requestedRotationRate = requestedRotationStick * fullScaleRotationRate;
         double yawRadians = Devices.getYawRadians();
+
+        SmartDashboard.putNumber("NavX Degree", yawRadians * (180/Math.PI));
 
         driveByNumbersFieldCentric(requestedXVelocity, requestedYVelocity, requestedRotationRate,yawRadians);
            

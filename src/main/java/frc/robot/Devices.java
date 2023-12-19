@@ -15,7 +15,9 @@ public class Devices {
 
         rawNavX = new AHRS();
 
-        rawNavX.setAngleAdjustment(180);
+        rawNavX.reset();
+
+        //rawNavX.setAngleAdjustment(180);
     }
 
     public static double swerveXRate() {
@@ -31,7 +33,7 @@ public class Devices {
     }
 
     public static double getYawRadians(){
-        return rawNavX.getAngle() * (Math.PI / 180);
+        return -1 * rawNavX.getAngle() * (Math.PI / 180);
     }
 
     public static double deadband(double inputSpeed, double dband) {

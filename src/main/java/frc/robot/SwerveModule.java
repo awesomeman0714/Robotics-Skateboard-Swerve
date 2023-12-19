@@ -86,36 +86,42 @@ public class SwerveModule {
 
         double encPos = steerEnc.getPosition();
 
-        //does encPos need to be between -pi and pi?
-        //yes?
-        //if encPos = 3pi/2 and angle = -pi.2 wheed doesnt need to move, but wheel will move 
+        encPos = zeroToPI(encPos); 
 
-        encPos = piNegPi(encPos); //converts between pi and -pi
-
-        //is angle always between pi and -pi?
-
-        angle = piNegPi(angle); //converts between pi and -pi
+        angle = zeroToPI(angle); 
 
         //https://math.stackexchange.com/questions/4451609/how-to-find-an-equivalent-angle-between-pi-and-pi
 
-        if (Math.abs(-1 * encPos - angle) > Math.PI/2) {
-            if (angle < 0) {
-                angle=(angle + Math.PI);
-            }
-           else {
-                angle=(angle - Math.PI);
-            }
-            speed=speed*-1;
+        // if (Math.abs(-1 * encPos - angle) > Math.PI/2) {
+        //     if (angle < 0) {
+        //         angle=(angle + Math.PI);
+        //     }
+        //    else {
+        //         angle=(angle - Math.PI);
+        //     }
+        //     speed=speed*-1;
+        // } 
+
+        double c = angle + Math.PI;
+
+        if(Math.abs(encPos - c) < Math.abs(encPos - angle) && Math.abs(encPos - c) < Math.PI){
+            angle = c;
+
+            angle = zeroToPI(angle);
+
+            speed *= -1;
         } 
 
+        speed /= 3;
+
         steerPID.setReference(-1*angle, ControlType.kPosition);
-        drivePID.setReference(speed/3, ControlType.kDutyCycle);
+        drivePID.setReference(speed, ControlType.kDutyCycle);
 
         SmartDashboard.putNumber("Pre Angle", encPos);
         SmartDashboard.putNumber("Angle", angle);
     }
 
-    public double piNegPi(double angle){
-        return angle + 2 * Math.floor((Math.PI - angle) / (2 * Math.PI)) * Math.PI;
+    public double zeroToPI(double angle){
+        return angle + 2 * Math.floor((Math.PI - angle) / (2 * Math.PI)) * Math.PI + Math.PI;
     } 
 }
