@@ -86,31 +86,17 @@ public class SwerveModule {
 
         double encPos = steerEnc.getPosition();
 
-        encPos = zeroToPI(encPos); 
+        double setPointAngle = closestAngle(encPos, angle);
+        double setPointAngleFlipped = closestAngle(encPos, angle + Math.PI);
 
-        angle = zeroToPI(angle); 
+        if(Math.abs(setPointAngle) <= Math.abs(setPointAngleFlipped)){
+            angle += setPointAngle;
 
-        //https://math.stackexchange.com/questions/4451609/how-to-find-an-equivalent-angle-between-pi-and-pi
-
-        // if (Math.abs(-1 * encPos - angle) > Math.PI/2) {
-        //     if (angle < 0) {
-        //         angle=(angle + Math.PI);
-        //     }
-        //    else {
-        //         angle=(angle - Math.PI);
-        //     }
-        //     speed=speed*-1;
-        // } 
-
-        double c = angle + Math.PI;
-
-        if(Math.abs(encPos - c) < Math.abs(encPos - angle) && Math.abs(encPos - c) < Math.PI){
-            angle = c;
-
-            angle = zeroToPI(angle);
-
+        } else {
             speed *= -1;
-        } 
+
+            angle += setPointAngleFlipped;
+        }
 
         speed /= 3;
 
@@ -121,7 +107,14 @@ public class SwerveModule {
         SmartDashboard.putNumber("Angle", angle);
     }
 
-    public double zeroToPI(double angle){
-        return angle + 2 * Math.floor((Math.PI - angle) / (2 * Math.PI)) * Math.PI + Math.PI;
-    } 
+    public double closestAngle(double a, double b){
+        
+        double dir = (b % (2 * Math.PI)) - (a % (2 * Math.PI));
+
+        if(Math.abs(dir) > Math.PI){
+            dir = -(Math.signum(dir) * (2 * Math.PI)) + dir;
+        }
+
+        return dir;
+    }
 }
